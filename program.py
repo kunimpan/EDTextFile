@@ -34,8 +34,23 @@ def encrypt():
     global encryptedData
     encryptedData = f.encrypt(plain) # encrypted
     encrypted_txt.insert(0, encryptedData)
+
+    with open('cipherText.txt', 'wb') as file:
+        file.write(encryptedData)
+
     key_txt.insert(0, genKey)
 
+
+def openCipher():
+    cipherFile = askopenfilename(initialdir="./", title="Open Cipher", filetypes=(("Text File", "*.txt"), ("All File", "*")))
+    with open(cipherFile, 'rb') as file:
+        global cipherData
+        cipherData = file.read()
+        cipher_txt.insert(0, cipherData)
+
+def decrypt():
+    decryptedData = f.decrypt(cipherData) # decrypt with key
+    decrypt_cipher_txt.insert(0,  decryptedData.decode())
 
 #design frame
 btnFrame=LabelFrame(root, text="Menu")
@@ -51,6 +66,12 @@ btnOpen.grid(row=0, column=0, padx=5, pady=5)
 
 btnEncrypt=Button(btnFrame, text="Encrypt", command=encrypt)
 btnEncrypt.grid(row=0, column=1, padx=5, pady=5)
+
+btnOpenCipher=Button(btnFrame, text="Open Cipher", command=openCipher)
+btnOpenCipher.grid(row=0, column=2, padx=5, pady=5)
+
+btnDecrypt=Button(btnFrame, text="Decrypt", command=decrypt)
+btnDecrypt.grid(row=0, column=3, padx=5, pady=5)
 
 #encrypt input widget
 plain_lable = Label(EncryptFrame, text="Plain text")
