@@ -1,9 +1,17 @@
 from tkinter import *
+from tkinter.filedialog import *
 
 root=Tk()
 root.title("Program Encrypt-Decrypt")
 root.geometry("500x350")
 root.resizable(0, 0)
+
+def openText():
+    myFile = askopenfilename(initialdir="./", title="Open note", filetypes=(("Text File", "*.txt"), ("All File", "*")))
+    with open(myFile, "rb") as file:
+        plain = file.read()
+        plain_txt.insert(0, plain.decode('ascii'))
+        print(plain_txt)
 
 #design frame
 btnFrame=LabelFrame(root, text="Menu")
@@ -14,7 +22,7 @@ EncryptFrame.grid(row=1, column=0)
 DecryptFrame.grid(row=2, column=0)
 
 #button widget
-btnOpen=Button(btnFrame, text="Open file")
+btnOpen=Button(btnFrame, text="Open file", command=openText)
 btnOpen.grid(row=0, column=0, padx=5, pady=5)
 
 btnEncrypt=Button(btnFrame, text="Encrypt")
