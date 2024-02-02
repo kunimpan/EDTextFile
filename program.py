@@ -1,17 +1,41 @@
 from tkinter import *
 from tkinter.filedialog import *
+from cryptography.fernet import Fernet
 
 root=Tk()
 root.title("Program Encrypt-Decrypt")
 root.geometry("500x350")
 root.resizable(0, 0)
 
+# Generate a symmetric key
+key = Fernet.generate_key()
+data = ''
+
 def openText():
     myFile = askopenfilename(initialdir="./", title="Open note", filetypes=(("Text File", "*.txt"), ("All File", "*")))
     with open(myFile, "rb") as file:
+        global plain
         plain = file.read()
         plain_txt.insert(0, plain.decode('ascii'))
         print(plain_txt)
+
+def encrypt():
+    # Create "secretKey.key" for keep key.
+    with open('secretKey.key', 'wb') as file:
+        file.write(key) 
+
+    # Read "secretKey.key"
+    with open('secretKey.key', 'rb') as file:
+        global genKey
+        genKey = file.read()
+
+    global f
+    f = Fernet(genKey)
+    global encryptedData
+    encryptedData = f.encrypt(plain) # encrypted
+    encrypted_txt.insert(0, encryptedData)
+    key_txt.insert(0, genKey)
+
 
 #design frame
 btnFrame=LabelFrame(root, text="Menu")
@@ -25,7 +49,7 @@ DecryptFrame.grid(row=2, column=0)
 btnOpen=Button(btnFrame, text="Open file", command=openText)
 btnOpen.grid(row=0, column=0, padx=5, pady=5)
 
-btnEncrypt=Button(btnFrame, text="Encrypt")
+btnEncrypt=Button(btnFrame, text="Encrypt", command=encrypt)
 btnEncrypt.grid(row=0, column=1, padx=5, pady=5)
 
 #encrypt input widget
