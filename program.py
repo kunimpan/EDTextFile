@@ -10,13 +10,13 @@ root.resizable(0, 0)
 
 # Generate a symmetric key
 key = Fernet.generate_key()
-data = ''
-#plain = b'' 
+plain = b'' 
+cipherData = b''
 
 def openText():
     myFile = askopenfilename(initialdir="./", title="Open note", filetypes=(("Text File", "*.txt"), ("All File", "*")))
     with open(myFile, "rb") as file:
-        global plain
+        #global plain
         plain = file.read()
         plain_txt.insert(0, plain.decode('ascii'))
 
@@ -32,7 +32,6 @@ def encrypt():
         genKey = file.read()
         print(genKey)
 
-    global f
     f = Fernet(genKey)
     global encryptedData
     encryptedData = f.encrypt(plain) # encrypted
@@ -47,17 +46,13 @@ def encrypt():
 def openCipher():
     cipherFile = askopenfilename(initialdir="./", title="Open Cipher", filetypes=(("Text File", "*.txt"), ("All File", "*")))
     with open(cipherFile, 'rb') as file:
-        global cipherData
+        #global cipherData
         cipherData = file.read()
         cipher_txt.insert(0, cipherData)
 
 def decrypt():
-    #decrypt_key_input = decrypt_key_txt.get()
-    decrypt_key_input = genKey
-    print(decrypt_key_input)
-    decryptedData = f.decrypt(decrypt_key_input) # decrypt with key
-
-    
+    keyDecrypt = Fernet(decrypt_key_txt.get()) # Decrypt key
+    decryptedData = keyDecrypt.decrypt(cipherData) # Decrypt
     decrypt_cipher_txt.insert(0,  decryptedData.decode())
 
 #design frame
