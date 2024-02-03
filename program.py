@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter.filedialog import *
 from cryptography.fernet import Fernet
+import tkinter.messagebox
 
 root=Tk()
 root.title("Program Encrypt-Decrypt")
@@ -10,6 +11,7 @@ root.resizable(0, 0)
 # Generate a symmetric key
 key = Fernet.generate_key()
 data = ''
+#plain = b'' 
 
 def openText():
     myFile = askopenfilename(initialdir="./", title="Open note", filetypes=(("Text File", "*.txt"), ("All File", "*")))
@@ -17,9 +19,9 @@ def openText():
         global plain
         plain = file.read()
         plain_txt.insert(0, plain.decode('ascii'))
-        print(plain_txt)
 
 def encrypt():
+
     # Create "secretKey.key" for keep key.
     with open('secretKey.key', 'wb') as file:
         file.write(key) 
@@ -28,6 +30,7 @@ def encrypt():
     with open('secretKey.key', 'rb') as file:
         global genKey
         genKey = file.read()
+        print(genKey)
 
     global f
     f = Fernet(genKey)
@@ -49,7 +52,12 @@ def openCipher():
         cipher_txt.insert(0, cipherData)
 
 def decrypt():
-    decryptedData = f.decrypt(cipherData) # decrypt with key
+    #decrypt_key_input = decrypt_key_txt.get()
+    decrypt_key_input = genKey
+    print(decrypt_key_input)
+    decryptedData = f.decrypt(decrypt_key_input) # decrypt with key
+
+    
     decrypt_cipher_txt.insert(0,  decryptedData.decode())
 
 #design frame
