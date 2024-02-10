@@ -5,8 +5,8 @@ import tkinter.messagebox
 from tkinter import scrolledtext
 
 root=Tk()
-root.title("Program Encrypt-Decrypt (Demo)")
-root.geometry("500x425")
+root.title("Program Encrypt-Decrypt Text (V.1.0)")
+root.geometry("500x450")
 root.resizable(0, 0)
 
 plain = b'' # Original text.
@@ -31,7 +31,7 @@ def encrypt():
     plain = bytes(temp, 'utf-8')
 
     if not plain.strip() :
-        tkinter.messagebox.showwarning("Warning", "Plaintext is empty.")
+        tkinter.messagebox.showwarning("Warning", "Plain text is empty.")
     else:
         key = Fernet.generate_key() # Generate a symmetric key
         # Create "secretKey.key" for keep key.
@@ -46,16 +46,20 @@ def encrypt():
         f = Fernet(genKey)
         global encryptedData
         encryptedData = f.encrypt(plain) # encrypted
+
+        encrypted_txt["state"]='normal'
         encrypted_txt.insert("1.0", encryptedData)
+        encrypted_txt["state"]='disable'
 
         with open('cipherText.txt', 'wb') as file:
             file.write(encryptedData)
+            
         key_txt["state"] = 'normal'
         key_txt.delete(0, END)
         key_txt.insert(0, genKey)
         key_txt["state"] = 'readonly'
 
-        tkinter.messagebox.showinfo("Encrypytion", "Plaintext is encrypted.")
+        tkinter.messagebox.showinfo("Encrypytion", "Plain text is encrypted.")
 
 def openCipher():
     try:
@@ -96,17 +100,32 @@ def decrypt():
                     decryptedData = keyDecrypt.decrypt(cipherData) # Decrypt
                     decrypt_cipher_txt.delete("1.0", END) # Clear plain text
                     decrypt_cipher_txt.insert("1.0", decryptedData.decode())
-                    tkinter.messagebox.showinfo("Decrypytion", "Ciphertext is decrypted.")
+                    tkinter.messagebox.showinfo("Decrypytion", "Cipher text is decrypted.")
                 else:
-                    tkinter.messagebox.showerror("Error", f"Decryption failed : Invalid format.")
+                    tkinter.messagebox.showerror("Error", f"Decryption failed : The key format is incorrect.")
             except Exception as e:
                 tkinter.messagebox.showerror("Error", f"Decryption failed : Invalid Cipher text or Key.")
             
+def reset():
+    plain_txt.delete("1.0", END)
+    encrypted_txt["state"]='normal'
+    encrypted_txt.delete("1.0", END)
+    encrypted_txt["state"]='disable'
+
+    key_txt["state"]='normal'
+    key_txt.delete(0, END)
+    key_txt["state"]='readonly'
+
+    cipher_txt.delete("1.0", END)
+    decrypt_key_txt.delete(0, END)
+    decrypt_cipher_txt.delete("1.0", END)
+    tkinter.messagebox.showinfo("Notify", "Text cleared.")
+
 #design frame
 btnFrame=LabelFrame(root, text="Options")
 EncryptFrame=LabelFrame(root, text="Encryption")
 DecryptFrame=LabelFrame(root, text="Decryption")
-btnFrame.pack(ipadx=18)
+btnFrame.pack(pady=(10,2))
 EncryptFrame.pack(pady=10)
 DecryptFrame.pack(pady=10)
 
@@ -120,19 +139,23 @@ btnEncrypt.grid(row=0, column=1, padx=5, pady=5)
 btnOpenCipher=Button(btnFrame, text="Open Cipher", command=openCipher)
 btnOpenCipher.grid(row=0, column=2, padx=5, pady=5)
 
-btnKey=Button(btnFrame, text="Decrypt key", command=openKey)
+btnKey=Button(btnFrame, text="Open key", command=openKey)
 btnKey.grid(row=0, column=3, padx=5, pady=5)
 
 btnDecrypt=Button(btnFrame, text="Decrypt", command=decrypt)
 btnDecrypt.grid(row=0, column=4, padx=5, pady=5)
 
+btnReset=Button(btnFrame, text="Reset", command=reset)
+btnReset.grid(row=0, column=5, padx=5, pady=5)
+
+
 #encrypt input widget
-plain_lable = Label(EncryptFrame, text="Plaintext")
+plain_lable = Label(EncryptFrame, text="Plain text")
 plain_txt = scrolledtext.ScrolledText(EncryptFrame, bg="white", width = 37, height = 1)
-encrypted_lable = Label(EncryptFrame, text="Cipher text")
-encrypted_txt = scrolledtext.ScrolledText(EncryptFrame, bg="white", width = 37, height = 1)
+encrypted_lable = Label(EncryptFrame, text="Encrypted text")
+encrypted_txt = scrolledtext.ScrolledText(EncryptFrame, bg="white", width = 37, height = 1, state='disabled')
 key_lable= Label(EncryptFrame, text="Key generate")
-key_txt = Entry(EncryptFrame, width=52)
+key_txt = Entry(EncryptFrame, width=52, state='readonly')
 
 plain_lable.grid(row=0, column=0, padx=5, pady=5, sticky=NW)
 plain_txt.grid(row=0, column=1, padx=2, pady=2)
@@ -144,9 +167,9 @@ key_txt.grid(row=2, column=1)
 #decrypt input widget
 cipher_lable = Label(DecryptFrame, text="Cipher text")
 cipher_txt = scrolledtext.ScrolledText(DecryptFrame, bg="white", width = 37, height = 1)
-decrypt_key_lable = Label(DecryptFrame, text="Decrypt key ")
+decrypt_key_lable = Label(DecryptFrame, text="Decrypt key    ")
 decrypt_key_txt = Entry(DecryptFrame, width=52)
-decrypt_cipher_lable = Label(DecryptFrame, text="Plaintext")
+decrypt_cipher_lable = Label(DecryptFrame, text="Plain text")
 decrypt_cipher_txt = scrolledtext.ScrolledText(DecryptFrame, bg="white", width = 37, height = 1)
 
 cipher_lable.grid(row=0, column=0, padx=5, pady=5, sticky=NW)
