@@ -6,7 +6,7 @@ from tkinter import scrolledtext
 
 root=Tk()
 root.title("Program Encrypt-Decrypt Text (V.1.0)")
-root.geometry("500x450")
+root.geometry("500x500")
 root.resizable(0, 0)
 
 plain = b'' # Original text.
@@ -98,8 +98,10 @@ def decrypt():
                 if len(decrypt_key_txt.get()) == 44:
                     keyDecrypt = Fernet(decrypt_key_txt.get()) # Decrypt key
                     decryptedData = keyDecrypt.decrypt(cipherData) # Decrypt
+                    decrypt_cipher_txt["state"]='normal'
                     decrypt_cipher_txt.delete("1.0", END) # Clear plain text
                     decrypt_cipher_txt.insert("1.0", decryptedData.decode())
+                    decrypt_cipher_txt["state"]='disable'
                     tkinter.messagebox.showinfo("Decrypytion", "Cipher text is decrypted.")
                 else:
                     tkinter.messagebox.showerror("Error", f"Decryption failed : The key format is incorrect.")
@@ -119,41 +121,52 @@ def reset():
     cipher_txt.delete("1.0", END)
     decrypt_key_txt.delete(0, END)
     decrypt_cipher_txt.delete("1.0", END)
-    tkinter.messagebox.showinfo("Notify", "Text cleared.")
+    tkinter.messagebox.showinfo("Notify", "Cleared.")
+
+#settings
+btnFont = ("Arial", 9, "bold")
+titleFont = ("Arial", 15, "bold")
+labelFrameFont = ("", 11, "underline")
 
 #design frame
-btnFrame=LabelFrame(root, text="Options")
-EncryptFrame=LabelFrame(root, text="Encryption")
-DecryptFrame=LabelFrame(root, text="Decryption")
+titleFrame=Frame(root)
+btnFrame=LabelFrame(root, text="Options", font=labelFrameFont)
+EncryptFrame=LabelFrame(root, text="Encryption", font=labelFrameFont)
+DecryptFrame=LabelFrame(root, text="Decryption",  font=labelFrameFont)
+titleFrame.pack()
 btnFrame.pack(pady=(10,2))
 EncryptFrame.pack(pady=10)
 DecryptFrame.pack(pady=10)
 
+#title frame
+title_lable=Label(titleFrame, text="Program Encrypt-Decrypt Text and Text file", font=titleFont)
+title_lable.pack(pady=(12,2))
+
 #button widget
-btnOpen=Button(btnFrame, text="Open Text", command=openText)
-btnOpen.grid(row=0, column=0, padx=5, pady=5)
+btnOpen=Button(btnFrame, text="Open Text", command=openText, font=btnFont)
+btnOpen.grid(row=0, column=0, padx=4, pady=5)
 
-btnEncrypt=Button(btnFrame, text="Encrypt", command=encrypt)
-btnEncrypt.grid(row=0, column=1, padx=5, pady=5)
+btnEncrypt=Button(btnFrame, text="Encrypt", command=encrypt, font=btnFont)
+btnEncrypt.grid(row=0, column=1, padx=4, pady=5)
 
-btnOpenCipher=Button(btnFrame, text="Open Cipher", command=openCipher)
-btnOpenCipher.grid(row=0, column=2, padx=5, pady=5)
+btnOpenCipher=Button(btnFrame, text="Open Cipher", command=openCipher, font=btnFont)
+btnOpenCipher.grid(row=0, column=2, padx=4, pady=5)
 
-btnKey=Button(btnFrame, text="Open key", command=openKey)
-btnKey.grid(row=0, column=3, padx=5, pady=5)
+btnKey=Button(btnFrame, text="Open key", command=openKey, font=btnFont)
+btnKey.grid(row=0, column=3, padx=4, pady=5)
 
-btnDecrypt=Button(btnFrame, text="Decrypt", command=decrypt)
-btnDecrypt.grid(row=0, column=4, padx=5, pady=5)
+btnDecrypt=Button(btnFrame, text="Decrypt", command=decrypt, font=btnFont)
+btnDecrypt.grid(row=0, column=4, padx=4, pady=5)
 
-btnReset=Button(btnFrame, text="Reset", command=reset)
-btnReset.grid(row=0, column=5, padx=5, pady=5)
+btnReset=Button(btnFrame, text="Clear ", command=reset, font=btnFont)
+btnReset.grid(row=0, column=5, padx=4, pady=5)
 
 
 #encrypt input widget
 plain_lable = Label(EncryptFrame, text="Plain text")
 plain_txt = scrolledtext.ScrolledText(EncryptFrame, bg="white", width = 37, height = 1)
 encrypted_lable = Label(EncryptFrame, text="Encrypted text")
-encrypted_txt = scrolledtext.ScrolledText(EncryptFrame, bg="white", width = 37, height = 1, state='disabled')
+encrypted_txt = scrolledtext.ScrolledText(EncryptFrame, bg="#F0F0F0", width = 37, height = 1, state='disabled')
 key_lable= Label(EncryptFrame, text="Key generate")
 key_txt = Entry(EncryptFrame, width=52, state='readonly')
 
@@ -170,13 +183,13 @@ cipher_txt = scrolledtext.ScrolledText(DecryptFrame, bg="white", width = 37, hei
 decrypt_key_lable = Label(DecryptFrame, text="Decrypt key    ")
 decrypt_key_txt = Entry(DecryptFrame, width=52)
 decrypt_cipher_lable = Label(DecryptFrame, text="Plain text")
-decrypt_cipher_txt = scrolledtext.ScrolledText(DecryptFrame, bg="white", width = 37, height = 1)
+decrypt_cipher_txt = scrolledtext.ScrolledText(DecryptFrame, bg="#F0F0F0", width = 37, height = 1, state='disabled')
 
 cipher_lable.grid(row=0, column=0, padx=5, pady=5, sticky=NW)
 cipher_txt.grid(row=0, column=1, padx=2, pady=2)
 decrypt_key_lable.grid(row=1, column=0, padx=5, pady=5, sticky=W)
 decrypt_key_txt.grid(row=1, column=1)
 decrypt_cipher_lable.grid(row=2, column=0, padx=5, pady=5, sticky=NW)
-decrypt_cipher_txt.grid(row=2, column=1, padx=3, pady=2)
+decrypt_cipher_txt.grid(row=2, column=1, padx=3, pady=(2,7))
 
 root.mainloop()
