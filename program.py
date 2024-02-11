@@ -5,7 +5,8 @@ import tkinter.messagebox
 from tkinter import scrolledtext
 
 root=Tk()
-root.title("Program Encrypt-Decrypt Text (V.1.0)")
+root.title("EDTextFile (V.1.0)")
+root.iconbitmap("E:/RMUTL/ENGCE110/program-encrypt-text/icon/note.ico")
 root.geometry("500x500")
 root.resizable(0, 0)
 
@@ -120,7 +121,10 @@ def reset():
 
     cipher_txt.delete("1.0", END)
     decrypt_key_txt.delete(0, END)
+
+    decrypt_cipher_txt["state"]='normal'
     decrypt_cipher_txt.delete("1.0", END)
+    decrypt_cipher_txt["state"]='disable'
     tkinter.messagebox.showinfo("Notify", "Cleared.")
 
 #settings
