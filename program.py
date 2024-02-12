@@ -6,7 +6,7 @@ from tkinter import scrolledtext
 
 root=Tk()
 root.title("EDTextFile (V.1.0)")
-root.iconbitmap("E:/RMUTL/ENGCE110/program-encrypt-text/icon/note.ico")
+#root.iconbitmap("./icon/note.ico")
 root.geometry("500x500")
 root.resizable(0, 0)
 
