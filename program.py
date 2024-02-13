@@ -6,13 +6,13 @@ from tkinter import scrolledtext
 
 root=Tk()
 root.title("EDTextFile (V.1.0)")
-#root.iconbitmap("./icon/note.ico")
 root.geometry("500x500")
 root.resizable(0, 0)
 
 plain = b'' # Original text.
 cipherData = b'' # The original text has been encrypted.
 
+# Function import plain text file
 def openText():
     try:
         myFile = askopenfilename(initialdir="./", title="Open Text", filetypes=(("Text File", "*.txt"), ("All File", "*")))
@@ -24,6 +24,7 @@ def openText():
     except FileNotFoundError:
         tkinter.messagebox.showerror("Erorr", "File not found.")
 
+# Function encrypt plain text file
 def encrypt():                
     encrypted_txt.delete("1.0", END) # Clear cipher text
     key_txt.delete(0, END) # Clear decrypt key text
@@ -62,6 +63,7 @@ def encrypt():
 
         tkinter.messagebox.showinfo("Encrypytion", "Plain text is encrypted.")
 
+# Function import cipher file
 def openCipher():
     try:
         cipherFile = askopenfilename(initialdir="./", title="Open Cipher", filetypes=(("Text File", "*.txt"), ("All File", "*")))
@@ -74,19 +76,18 @@ def openCipher():
     except FileNotFoundError:
         tkinter.messagebox.showerror("Erorr", "File not found.")
 
+# Function import key file
 def openKey():
-    #decrypt_key_txt["state"] = 'normal'
     try:
         cipherFile = askopenfilename(initialdir="./", title="Open Key", filetypes=(("Key File", "*.key"), ("All File", "*")))
         with open(cipherFile, 'rb') as file:
             decrypt_key_txt.delete(0, END) # Clear decrypt key text
             decrypt_key_txt.insert(0, file.read())
-            #decrypt_key_txt["state"] = 'readonly'
     except FileNotFoundError:
         tkinter.messagebox.showerror("Erorr", "File not found.")
 
     
-
+# Function decrypt cipher text file
 def decrypt():
     cipherData = cipher_txt.get("1.0", tkinter.END)
     if not cipherData.strip() :
@@ -108,7 +109,8 @@ def decrypt():
                     tkinter.messagebox.showerror("Error", f"Decryption failed : The key format is incorrect.")
             except Exception as e:
                 tkinter.messagebox.showerror("Error", f"Decryption failed : Invalid Cipher text or Key.")
-            
+
+# Function clear input text    
 def reset():
     plain_txt.delete("1.0", END)
     encrypted_txt["state"]='normal'
