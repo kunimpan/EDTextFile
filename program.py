@@ -17,7 +17,6 @@ def openText():
     try:
         myFile = askopenfilename(initialdir="./", title="Open Text", filetypes=(("Text File", "*.txt"), ("All File", "*")))
         with open(myFile, "rb") as file:
-            global plain
             plain = file.read()
             plain_txt.delete("1.0", END)
             plain_txt.insert("1.0", plain.decode('utf-8'))
